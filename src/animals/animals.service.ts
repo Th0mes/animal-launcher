@@ -1,26 +1,52 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAnimalDto } from './dto/create-animal.dto';
-import { UpdateAnimalDto } from './dto/update-animal.dto';
+import { Animal, Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { capitalizeFirstLetter } from 'src/utils/capitalizeFirstLetter';
 
 @Injectable()
 export class AnimalsService {
-  create(createAnimalDto: CreateAnimalDto) {
-    return 'This action adds a new animal';
+  constructor(private prisma: PrismaService) {}
+
+  async create(data: Prisma.AnimalCreateInput): Promise<Animal> {
+    const modifiedData: typeof data = {
+      ...data,
+      name: capitalizeFirstLetter(data.name),
+    };
+
+    if (data.breed !== undefined) {
+      return this.prisma.animal.create({
+        data: modifiedData,
+      });
+    }
+
+    return this.prisma.animal.create({
+      data: { ...modifiedData, breed: 'Vira-lata' },
+    });
   }
 
-  findAll() {
-    return `This action returns all animals`;
+  async findAll(): Promise<Animal[]> {
+    return this.prisma.animal.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} animal`;
+  async findOne(id: Prisma.AnimalWhereUniqueInput): Promise<Animal> {
+    return this.prisma.animal.findUnique({
+      where: id,
+    });
   }
 
-  update(id: number, updateAnimalDto: UpdateAnimalDto) {
-    return `This action updates a #${id} animal`;
+  async update(
+    id: Prisma.AnimalWhereUniqueInput,
+    data: Prisma.AnimalUpdateInput,
+  ): Promise<Animal> {
+    return this.prisma.animal.update({
+      data: data,
+      where: id,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} animal`;
+  async remove(id: Prisma.AnimalWhereUniqueInput): Promise<Animal> {
+    return this.prisma.animal.delete({
+      where: id,
+    });
   }
 }
