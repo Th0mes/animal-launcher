@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Animal, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { capitalizeFirstLetter } from 'src/utils/capitalizeFirstLetter';
+import { CreateAnimalDto } from './dto/create-animal.dto';
 
 @Injectable()
 export class AnimalsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.AnimalCreateInput): Promise<Animal> {
+  async create(data: CreateAnimalDto): Promise<Animal> {
     const modifiedData: typeof data = {
       ...data,
       name: capitalizeFirstLetter(data.name),
@@ -28,25 +29,28 @@ export class AnimalsService {
     return this.prisma.animal.findMany();
   }
 
-  async findOne(id: Prisma.AnimalWhereUniqueInput): Promise<Animal> {
+  async findOne(id: string): Promise<Animal> {
     return this.prisma.animal.findUnique({
-      where: id,
+      where: {
+        id,
+      },
     });
   }
 
-  async update(
-    id: Prisma.AnimalWhereUniqueInput,
-    data: Prisma.AnimalUpdateInput,
-  ): Promise<Animal> {
+  async update(id: string, data: Prisma.AnimalUpdateInput): Promise<Animal> {
     return this.prisma.animal.update({
       data: data,
-      where: id,
+      where: {
+        id,
+      },
     });
   }
 
-  async remove(id: Prisma.AnimalWhereUniqueInput): Promise<Animal> {
+  async remove(id: string): Promise<Animal> {
     return this.prisma.animal.delete({
-      where: id,
+      where: {
+        id,
+      },
     });
   }
 }

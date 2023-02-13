@@ -11,32 +11,50 @@ datasource db {
 }
 
 model Animal {
-  id        String   @id @default(cuid())
-  name      String
-  age       Int
-  breed     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id    String @id @default(cuid())
+  name  String
+  age   Int
+  breed String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  shelter   Shelter @relation(fields: [shelterId], references: [id])
+  shelterId String
+
+  @@map("animal")
 }
 
 model Shelter {
-  id            String          @id @default(cuid())
-  name          String
-  address       String
-  phone         String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  id           String @id @default(cuid())
+  name         String
+  zipcode      String
+  city         String
+  neighborhood String
+  street       String
+  number       String
+  phone        String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   businessHours BusinessHours[]
+  animal        Animal[]
+
+  @@map("shelter")
 }
 
 model BusinessHours {
-  id        String   @id @default(cuid())
-  day       Int
-  open      DateTime
-  close     DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id    String   @id @default(cuid())
+  day   Int
+  open  DateTime
+  close DateTime
 
-  shelterId String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   shelter   Shelter @relation(fields: [shelterId], references: [id])
+  shelterId String  @map("shelter_id")
+
+  @@map("business_hours")
 }

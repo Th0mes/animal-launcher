@@ -9,4 +9,7 @@ export class CreateAnimalDto {
 
   @IsString()
   breed: string;
+
+  @IsString()
+  shelterId: string;
 }
