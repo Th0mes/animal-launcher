@@ -1,26 +1,60 @@
 import { Injectable } from '@nestjs/common';
-import { CreateShelterDto } from './dto/create-shelter.dto';
-import { UpdateShelterDto } from './dto/update-shelter.dto';
+import { Prisma, Shelter } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SheltersService {
-  create(createShelterDto: CreateShelterDto) {
-    return 'This action adds a new shelter';
+  constructor(private prisma: PrismaService) {}
+
+  async create(data: Prisma.ShelterCreateInput): Promise<Shelter> {
+    // const businessHoursData: typeof data.businessHours.create = [];
+
+    // for (let i = 0; i < [...Array(7)].length; i++) {
+    //   businessHoursData.push({
+    //     day: i,
+    //     close: new Date(),
+    //     open: new Date(),
+    //   });
+    // }
+
+    return this.prisma.shelter.create({
+      data: {
+        name: data.name,
+        address: data.address,
+        phone: data.phone,
+        // businessHours: {
+        //   create: businessHoursData,
+        // },
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all shelters`;
+  async findAll(): Promise<Shelter[]> {
+    return this.prisma.shelter.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shelter`;
+  async findOne(id: string): Promise<Shelter> {
+    return this.prisma.shelter.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  update(id: number, updateShelterDto: UpdateShelterDto) {
-    return `This action updates a #${id} shelter`;
+  async update(id: string, data: Prisma.ShelterUpdateInput): Promise<Shelter> {
+    return this.prisma.shelter.update({
+      data,
+      where: {
+        id,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} shelter`;
+  async remove(id: string): Promise<Shelter> {
+    return this.prisma.shelter.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

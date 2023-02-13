@@ -11,13 +11,12 @@ datasource db {
 }
 
 model Animal {
-  id            String          @id @default(cuid())
-  name          String
-  age           Int
-  breed         String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  ShelterAnimal ShelterAnimal[]
+  id        String   @id @default(cuid())
+  name      String
+  age       Int
+  breed     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Shelter {
@@ -27,20 +26,7 @@ model Shelter {
   phone         String
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  BusinessHours BusinessHours[]
-  ShelterAnimal ShelterAnimal[]
-}
-
-model ShelterAnimal {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  shelterId String
-  shelter   Shelter @relation(fields: [shelterId], references: [id])
-
-  animalId String
-  animal   Animal @relation(fields: [animalId], references: [id])
+  businessHours BusinessHours[]
 }
 
 model BusinessHours {

@@ -29,16 +29,16 @@ export class SheltersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.sheltersService.findOne(+id);
+    return this.sheltersService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateShelterDto: UpdateShelterDto) {
-    return this.sheltersService.update(+id, updateShelterDto);
+    return this.sheltersService.update(id, updateShelterDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.sheltersService.remove(+id);
+    return this.sheltersService.remove(id);
   }
 }

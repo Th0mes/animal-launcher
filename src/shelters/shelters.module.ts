@@ -4,6 +4,6 @@ import { SheltersController } from './shelters.controller';
 
 @Module({
   controllers: [SheltersController],
-  providers: [SheltersService]
+  providers: [SheltersService],
 })
 export class SheltersModule {}
